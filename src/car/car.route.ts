@@ -1,6 +1,6 @@
 //routing
 import { Express } from "express";
-import { createCarController, getAllCarController, getCarByIdController, deleteCarController, updateCarController } from "./car.controller";
+import { createCarController, getAllCarController, getCarByIdController, deleteCarController, updateCarController, getAllCarsWithMaintenanceController, getAllCarsWithReservationsController } from "./car.controller";
 
 
 //CRUD
@@ -26,6 +26,35 @@ const carRoutes = (app: Express) => {
             }
         }
     )
+
+    //Get all cars with reservations
+    app.route("/car/allCarsWithReservations").get(
+        // isAuthenticated,
+        // adminRoleAuth, // Both users and admins can access this.
+        async (req, res, next) =>{
+            try {
+                await getAllCarsWithReservationsController(req, res);
+                // return 
+            } catch (error) {
+                next(error);
+            }
+        }
+    )
+    
+    //Get all cars with Maintenance
+    app.route("/car/allCarsWithMaintenance").get(
+        // isAuthenticated,
+        // adminRoleAuth, // Both users and admins can access this.
+        async (req, res, next) =>{
+            try {
+                await getAllCarsWithMaintenanceController(req, res);
+                // return 
+            } catch (error) {
+                next(error);
+            }
+        }
+    )
+    
 
     //get Car by ID
     app.route("/car/:id").get(

@@ -52,3 +52,23 @@ export const deleteCarService = async (CarID: number) =>{
 
     return "Car deleting failed";
 }
+
+// Fetching maintenance for all cars
+export const getAllCarsWithMaintenanceService = async () => {
+     const carsWithMaintenance = await db.query.CarTable.findMany({
+        with: {
+            maintenance: true
+        }
+    })
+    return carsWithMaintenance;
+}
+
+// Get cars with reservations
+export const getAllCarsWithReservationsService = async () => {
+    const customersWithReservations =  await db.query.CustomerTable.findMany({
+        with: {
+            reservations: true
+        }
+    })
+    return customersWithReservations;
+}

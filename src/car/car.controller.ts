@@ -1,6 +1,6 @@
 // API
 
-import { createCarService, getAllCarsService, getCarByIDService, updateCarService, deleteCarService } from "./car.service";
+import { getAllCarsWithMaintenanceService, createCarService, getAllCarsService, getCarByIDService, updateCarService, deleteCarService, getAllCarsWithReservationsService } from "./car.service";
 import { Request, Response } from "express";
 
 //Create a new car
@@ -25,12 +25,38 @@ export const getAllCarController = async (req: Request, res: Response) =>{
 
         const getAllCars = await getAllCarsService();
          if (!getAllCars || getAllCars.length === 0) {
-            return res.status(404).json({message: "No todos found"});
+            return res.status(404).json({message: "No cars found"});
         }
         return res.status(200).json({data: getAllCars});
     
     } catch (error: any) {
         return res.status(500).json({error: error.message})        
+    }
+}
+
+//Get customers with reservations
+export const getAllCarsWithReservationsController = async (req: Request, res: Response) => {
+    try {
+         const carsWithReservations = await getAllCarsWithReservationsService();
+        if (!carsWithReservations) {
+            return res.status(404).json({message: "Car not found"});
+        }
+        return res.status(200).json({data: carsWithReservations});
+    } catch (error: any) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
+//Get cars with their Maintenance record
+export const getAllCarsWithMaintenanceController = async (req: Request, res: Response) => {
+    try {
+         const carsWithMaintenance = await getAllCarsWithMaintenanceService();
+        if (!carsWithMaintenance) {
+            return res.status(404).json({message: "Car not found"});
+        }
+        return res.status(200).json({data: carsWithMaintenance});
+    } catch (error: any) {
+        return res.status(500).json({error: error.message});
     }
 }
 
@@ -69,7 +95,7 @@ export const updateCarController = async (req: Request, res: Response) => {
 
         const updatedMessage = await updateCarService(id, carUpdates);
         if (!updatedMessage) {
-            return res.status(404).json({message: "Car not found or not updated"});
+            return res.status(404).json({message: "Car not found !!"});
         }        
         return res.status(200).json({message: updatedMessage});
     } catch (error: any) {
@@ -87,11 +113,12 @@ export const deleteCarController = async (req: Request, res: Response) => {
         
         const deletedMessage = await deleteCarService(id);
         if (!deletedMessage) {
-            return res.status(404).json({message: "Car not found or not deleted"});
+            return res.status(404).json({message: "Car not found !!!"});
         }
         return res.status(200).json({message: deletedMessage});
     } catch (error: any) {
         return res.status(500).json({error: error.message});
     }
 }
+
 

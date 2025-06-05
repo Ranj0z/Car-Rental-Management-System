@@ -1,0 +1,49 @@
+# Test the base URL
+GET http://localhost:3000
+
+### //********************CAR*****************************//
+
+# Create a new car
+
+POST http://localhost:3000/car/newcar
+Content-Type: application/json
+
+ { 
+   "CarModel": "Nissan GTR-R35", 
+   "year": "2024-09-01", 
+   "color": "Silver", 
+   "rentalRate": "578.00", 
+   "availability": "yes", 
+   "location": 5 
+ }
+
+###
+
+# Get all cars from CarTable
+
+GET http://localhost:3000/car/allCars
+
+###
+
+# Get car by ID
+GET http://localhost:3000/car/4
+
+###
+
+# Update Car by ID
+PUT  http://localhost:3000/car/update/7
+Content-Type: application/json
+
+{ 
+   "year": "2025-03-01", 
+   "color": "Black", 
+   "rentalRate": "60.00", 
+   "availability": "yes"
+}
+
+###
+
+# Delete Car by ID
+
+DELETE http://localhost:3000/car/delete/4
+

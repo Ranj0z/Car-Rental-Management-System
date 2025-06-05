@@ -1,19 +1,30 @@
 //routing
 import { Express } from "express";
-import { createCustomerController } from "./auth.controller";
+import { authController, customerLoginController } from "./auth.controller";
 
 
-const customer = (app: Express) =>{
+const authRoutes = (app: Express) =>{
     //route
     app.route("/auth/register").post(
         async (req, res, next) =>{
             try {
-                await createCustomerController(req, res);
+                await authController(req, res);
             } catch (error) {
                 next(error);
             }
         }
     )
+
+    // login route
+    app.route ("/auth/login").post(
+        async (req, res, next) =>{
+            try {
+                await customerLoginController(req, res)
+            } catch (error) {
+                next()
+            }
+        }
+    )
 }
 
-export default customer;
+export default authRoutes;

@@ -1,0 +1,58 @@
+# Test the base URL
+GET http://localhost:3000
+
+### //********************RESERVATION*****************************//
+
+# Create a new Reservation car
+
+POST http://localhost:3000/reservation/newreservation
+Content-Type: application/json
+
+   { 
+    "customerID": 5, 
+    "carID": 5, 
+    "reservationDate": "2024-06-05", 
+    "returnDate": "2024-06-14", 
+    "totalAmount": "350.00" 
+   }
+###
+
+# Get all reservation from ReservationTable
+
+GET http://localhost:3000/reservation/allReservations
+
+###
+
+# Get reservation by ID
+GET http://localhost:3000/reservation/4
+
+###
+
+# Get reservation by CarID
+GET http://localhost:3000/reservation/CarID/8
+
+###
+
+# Get reservation by CustomerID
+GET http://localhost:3000/reservation/CustomerID/1
+
+
+###
+
+# Update reservation by id
+PUT  http://localhost:3000/booking/update/8
+Content-Type: application/json
+
+  { 
+    "customerID": 5, 
+    "carID": 5, 
+    "reservationDate": "2024-06-05", 
+    "returnDate": "2024-06-14", 
+    "totalAmount": "350.00" 
+  }
+###
+
+# Delete Reservation by ID
+
+DELETE http://localhost:3000/reservation/delete/8
+

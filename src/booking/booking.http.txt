@@ -1,0 +1,58 @@
+# Test the base URL
+GET http://localhost:3000
+
+### //********************BOOKING*****************************//
+
+# Create a new booking car
+
+POST http://localhost:3000/booking/newbooking
+Content-Type: application/json
+
+   { 
+    "customerID": 8, 
+    "carID": 3, 
+    "renatlStartDate": "2024-06-06", 
+    "rentalEndDate": "2024-06-11", 
+    "totalAmount": "275.00" 
+   }
+###
+
+# Get all bookings from Bookingable
+
+GET http://localhost:3000/booking/allBookings
+
+###
+
+# Get booking by ID
+GET http://localhost:3000/booking/8
+
+###
+
+# Get booking by CarID
+GET http://localhost:3000/booking/CarID/1
+
+###
+
+# Get booking by CustomerID
+GET http://localhost:3000/booking/CustomerID/4
+
+###
+
+# Update booking by id
+PUT  http://localhost:3000/booking/update/8
+Content-Type: application/json
+
+  { 
+    "customerID": 4, 
+    "carID": 6, 
+    "renatlStartDate": "2024-06-06", 
+    "rentalEndDate": "2024-06-11", 
+    "totalAmount": "275.00" 
+   }
+
+###
+
+# Delete Booking by ID
+
+DELETE http://localhost:3000/booking/delete/8
+

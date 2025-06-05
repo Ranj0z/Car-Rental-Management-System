@@ -1,7 +1,9 @@
-import {serial} from "drizzle-orm/pg-core";
 import {relations} from "drizzle-orm";
-import {varchar, text, date, decimal, integer} from "drizzle-orm/pg-core";
-import {pgTable} from "drizzle-orm/pg-core";
+import {serial, boolean, varchar, text, date, decimal, integer, pgTable, pgEnum} from "drizzle-orm/pg-core";
+
+
+//Role ENUM
+export const RoleEnum = pgEnum("role", ["admin", "user"]);
 
 export const CustomerTable = pgTable("customer", {
     CustomerID: serial("CustomerID").primaryKey(),
@@ -10,8 +12,36 @@ export const CustomerTable = pgTable("customer", {
     email: varchar("email", { length: 100 }).notNull().unique(),
     phoneNumber: text ("phone_number",).notNull(),
     address: varchar("address", { length: 255 }).notNull(),
-    }   
+    password: varchar ("password", ).notNull(),
+    role: RoleEnum("role").default("user"),
+    isVerified: boolean("is_verified").default(false),
+    verificationCode: varchar("verification_code", {length: 10})
+    }
 )
+/* 
+1. User will provide:
+    firstName, lastName,email, phoneNumber, Address, Password, 
+    role:user, isVerified: false, verification code: 12345
+
+2. Controller to send code
+    send an email from (dkranjoz16@gmail.com) -> 12345
+
+3. user will receive the code
+
+    //router
+4. Postman: verify user:
+    "email" : david.k.mwangi01@gmail.com
+    "code" : 12345
+
+    //service
+5. verifyUserService
+    12345 == 12345 if true
+    set isVerified -> true
+    set verificationCode -> null
+
+    firstName, lastName,email, phoneNumber, Address, Password, 
+    role:user, isVerified: true, verification code: null
+*/
 
 export const LocationTable = pgTable("location", {
     LocationID: serial("LocationID").primaryKey(),
@@ -43,14 +73,14 @@ export const BookingTable = pgTable("booking", {
     BookingID: serial("BookingID").primaryKey(),
     customerID: integer("customer_id").references(() =>CustomerTable.CustomerID,{onDelete: "cascade"}).notNull(),
     carID: integer("car_id").references(() =>CarTable.CarID, {onDelete: "cascade"}).notNull(),
-    renatlStartDate: date("booking_date").notNull(),
+    rentalStartDate: date("booking_date").notNull(),
     rentalEndDate: date("return_date").notNull(),
     totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
 })
 
 export const PaymentTable = pgTable("payment", {
     PaymentID: serial("PaymentID").primaryKey(),
-    customerID: integer("customer_id").references(() =>CustomerTable.CustomerID, {onDelete: "cascade"}).notNull(),
+    BookingID: integer("booking_id").references(() =>BookingTable.BookingID, {onDelete: "cascade"}).notNull(),
     paymentDate: date("payment_date").notNull(),
     amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
     paymentMethod: varchar("payment_method", { length: 50 }).notNull(),
@@ -134,9 +164,9 @@ export const BookingRelations = relations(BookingTable, ({ one, many}) => ({
 
 //PaymentTable Relations - 1 payment belongs to 1 booking
 export const PaymentRelations = relations(PaymentTable, ({ one }) => ({
-    customer: one(CustomerTable, {
-        fields: [PaymentTable.customerID],
-        references: [CustomerTable.CustomerID],
+    booking: one(BookingTable, {
+        fields: [PaymentTable.BookingID],
+        references: [BookingTable.BookingID],
     }),
 }));
 
@@ -165,7 +195,14 @@ export type TIBooking = typeof BookingTable.$inferInsert;
 export type TSBooking = typeof BookingTable.$inferSelect;
 export type TIReservation = typeof ReservationTable.$inferInsert;
 export type TSReservation = typeof ReservationTable.$inferSelect;
-
+export type TIPayment = typeof PaymentTable.$inferInsert;
+export type TSPayment = typeof PaymentTable.$inferSelect;
+// export type TICar = typeof CarTable.$inferInsert;
+// export type TSCar = typeof CarTable.$inferSelect;
+// export type TICar = typeof CarTable.$inferInsert;
+// export type TSCar = typeof CarTable.$inferSelect;
+// export type TICar = typeof CarTable.$inferInsert;
+// export type TSCar = typeof CarTable.$inferSelect;
 
 
 

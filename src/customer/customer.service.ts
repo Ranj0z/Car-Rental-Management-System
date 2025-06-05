@@ -12,9 +12,19 @@ export const createCustomerService = async (customer: TICustomer) => {
 }
 
 //Get All Existing Customers
-export const getAllCustomerService = async() =>{
+export const getAllCustomersService = async() =>{
     const allCustomers = await db.query.CustomerTable.findMany();
     return allCustomers;
+}
+
+// Get customer with reservations
+export const getAllCustomersWithReservationsService = async () => {
+    const customersWithReservations =  await db.query.CustomerTable.findMany({
+        with: {
+            reservations: true
+        }
+    })
+    return customersWithReservations;
 }
 
 // Get customer By CustomerID
@@ -50,3 +60,13 @@ export const deleteCustomerService = async (ID: number) =>{
 
     return "Customer deleting failed";
 }
+
+// Get customer By specific user ID
+// export const getCustomerByUserIDService = async (ID: number) => {
+//   const customerByID = await db.query.CustomerTable.findMany({
+//     where: eq(CustomerTable.CustomerID, ID)
+//   });
+//   return customerByID;
+// };
+
+

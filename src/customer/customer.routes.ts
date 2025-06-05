@@ -1,11 +1,13 @@
 //routing
 import { Express } from "express";
-import { createCustomerController, deleteCustomerController, getAllCustomerController, getCustomerByIdController, updateCustomerController } from "./customer.controller";
+// import { isAuthenticated } from "../middleware/bearAuth";
+import { createCustomerController, deleteCustomerController, getAllCustomersController, getAllCustomersWithReservationsController, getCustomerByIdController, /*getCustomerByUserIdController,*/ updateCustomerController } from "./customer.controller";
+import { adminRoleAuth, bothRoleAuth, userRoleAuth } from "../middleware/bearAuth";
 
-//CRUD
-const customer = (app: Express) => {
+//Auth Route
+const customerRoutes = (app: Express) => {
     //route
-//Create a new Customer
+//Create auth 
     app.route("/customer/newCustomer").post(
         async (req, res, next) =>{
             try {
@@ -18,9 +20,11 @@ const customer = (app: Express) => {
 
 //Get all customers
     app.route("/customer/allCustomers").get(
+        // isAuthenticated,
+        bothRoleAuth, // Both users and admins can access this.
         async (req, res, next) =>{
             try {
-                await getAllCustomerController(req, res);
+                await getAllCustomersController(req, res);
                 // return 
             } catch (error) {
                 next(error);
@@ -28,8 +32,23 @@ const customer = (app: Express) => {
         }
     )
 
+//Get all customerswith reservations
+app.route("/customer/allCustomersWithReservations").get(
+    // isAuthenticated,
+    // adminRoleAuth, // Both users and admins can access this.
+    async (req, res, next) =>{
+        try {
+            await getAllCustomersWithReservationsController(req, res);
+            // return 
+        } catch (error) {
+            next(error);
+        }
+    }
+)
+
 //get Customer by ID
     app.route("/customer/:id").get(
+        userRoleAuth,
         async (req, res, next) =>{
             try {
                 await getCustomerByIdController(req, res);
@@ -52,6 +71,7 @@ const customer = (app: Express) => {
 
     //Delete Customer by ID
     app.route("/customer/delete/:id").delete(
+        adminRoleAuth,
         async (req, res, next) =>{
             try {
                 await deleteCustomerController(req, res);
@@ -59,10 +79,20 @@ const customer = (app: Express) => {
                 next(error)
             }
         }
-    )
+    )    
 
-    
+    //get Customer by specific ID
+    // app.route("/customer/user/:id").get(
+    //     userRoleAuth,
+    //     async (req, res, next) =>{
+    //         try {
+    //             await getCustomerByUserIdController(req, res);
+    //         } catch (error: any) {
+    //             next(error)
+    //         }
+    //     }
+    // )
 }
 
-export default customer;
+export default customerRoutes;
 

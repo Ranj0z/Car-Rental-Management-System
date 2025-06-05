@@ -1,4 +1,5 @@
 import { db } from "./db";
+import bcrypt from "bcryptjs";
 import {
     CustomerTable,
     LocationTable,
@@ -26,11 +27,11 @@ async function seed() {
 
     // Insert into customer table
     await db.insert(CustomerTable).values([
-        { firstName: "John", lastName: "Doe", email: "john@example.com", phoneNumber: "555-1234", address: "1 Elm St" },
-        { firstName: "Jane", lastName: "Smith", email: "jane@example.com", phoneNumber: "555-5678", address: "2 Maple Ave" },
-        { firstName: "Alice", lastName: "Johnson", email: "alice@example.com", phoneNumber: "555-8765", address: "3 Oak Dr" },
-        { firstName: "Bob", lastName: "Brown", email: "bob@example.com", phoneNumber: "555-4321", address: "4 Birch Ln" },
-        { firstName: "Charlie", lastName: "Miller", email: "charlie@example.com", phoneNumber: "555-9999", address: "5 Cedar Rd" },
+        { firstName: "John", lastName: "Doe", email: "john@example.com", phoneNumber: "555-1234", address: "1 Elm St", password: await bcrypt.hash("mypassword", 10)},
+        { firstName: "Jane", lastName: "Smith", email: "jane@example.com", phoneNumber: "555-5678", address: "2 Maple Ave", password: await bcrypt.hash("mypassword0", 10) },
+        { firstName: "Alice", lastName: "Johnson", email: "alice@example.com", phoneNumber: "555-8765", address: "3 Oak Dr", password: await bcrypt.hash("mypassword1", 10) },
+        { firstName: "Bob", lastName: "Brown", email: "bob@example.com", phoneNumber: "555-4321", address: "4 Birch Ln", password: await bcrypt.hash("mypassword2", 10) },
+        { firstName: "Charlie", lastName: "Miller", email: "charlie@example.com", phoneNumber: "5559999", address: "5 Cedar Rd", password: await bcrypt.hash("mypassword3", 10) },
     ]);
 
     // Insert into car table
@@ -53,20 +54,20 @@ async function seed() {
 
     // Insert into booking table
     await db.insert(BookingTable).values([
-        { customerID: 1, carID: 1, renatlStartDate: "2024-06-05", rentalEndDate: "2024-06-10", totalAmount: "250.00" },
-        { customerID: 2, carID: 2, renatlStartDate: "2024-06-06", rentalEndDate: "2024-06-11", totalAmount: "275.00" },
-        { customerID: 3, carID: 3, renatlStartDate: "2024-06-07", rentalEndDate: "2024-06-12", totalAmount: "300.00" },
-        { customerID: 4, carID: 4, renatlStartDate: "2024-06-08", rentalEndDate: "2024-06-13", totalAmount: "325.00" },
-        { customerID: 5, carID: 5, renatlStartDate: "2024-06-09", rentalEndDate: "2024-06-14", totalAmount: "350.00" },
+        { customerID: 1, carID: 1, rentalStartDate: "2024-06-05", rentalEndDate: "2024-06-10", totalAmount: "250.00" },
+        { customerID: 2, carID: 2, rentalStartDate: "2024-06-06", rentalEndDate: "2024-06-11", totalAmount: "275.00" },
+        { customerID: 3, carID: 3, rentalStartDate: "2024-06-07", rentalEndDate: "2024-06-12", totalAmount: "300.00" },
+        { customerID: 4, carID: 4, rentalStartDate: "2024-06-08", rentalEndDate: "2024-06-13", totalAmount: "325.00" },
+        { customerID: 5, carID: 5, rentalStartDate: "2024-06-09", rentalEndDate: "2024-06-14", totalAmount: "350.00" },
     ]);
 
     // Insert into payment table
     await db.insert(PaymentTable).values([
-        { customerID: 1, paymentDate: "2024-06-05", amount: "250.00", paymentMethod: "Credit Card" },
-        { customerID: 2, paymentDate: "2024-06-06", amount: "275.00", paymentMethod: "Debit Card" },
-        { customerID: 3, paymentDate: "2024-06-07", amount: "300.00", paymentMethod: "Cash" },
-        { customerID: 4, paymentDate: "2024-06-08", amount: "325.00", paymentMethod: "Credit Card" },
-        { customerID: 5, paymentDate: "2024-06-09", amount: "350.00", paymentMethod: "Debit Card" },
+        { BookingID: 1, paymentDate: "2024-06-05", amount: "250.00", paymentMethod: "Credit Card" },
+        { BookingID: 2, paymentDate: "2024-06-06", amount: "275.00", paymentMethod: "Debit Card" },
+        { BookingID: 3, paymentDate: "2024-06-07", amount: "300.00", paymentMethod: "Cash" },
+        { BookingID: 4, paymentDate: "2024-06-08", amount: "325.00", paymentMethod: "Credit Card" },
+        { BookingID: 5, paymentDate: "2024-06-09", amount: "350.00", paymentMethod: "Debit Card" },
     ]);
 
     // Insert into maintenance table

@@ -1,0 +1,45 @@
+# Test the base URL
+GET http://localhost:3000
+
+### //**********************CUSTOMER******************//
+
+# Create a Customer
+POST http://localhost:3000/customer/newCustomer
+Content-Type: application/json
+
+{
+  "firstName": "David",
+  "lastName": "Mwangi",
+  "email": "davidmwangi01@example.com",
+  "phoneNumber": "0796166200",
+  "address": "Adison route"
+}
+
+###
+
+# Get all Customers
+GET http://localhost:3000/customer/allCustomers
+
+###
+
+# Get Customers by id
+GET http://localhost:3000/customer/3
+
+###
+
+# Update a Customer
+PATCH  http://localhost:3000/customer/update/3
+Content-Type: application/json
+
+{
+  "firstName": "David",
+  "lastName": "Ranjoz",
+  "email": "david.k.mwangi@example.com",
+  "phoneNumber": "0796166200",
+  "address": "Adison route"
+}
+
+###
+
+# Delete Customers by id
+DELETE  http://localhost:3000/customer/delete/2

@@ -1,10 +1,9 @@
 //API
 
-import { createCustomerService, deleteCustomerService, getAllCustomerService, getCustomerByIDService, updateCustomerService } from "./customer.service";
+import { createCustomerService, deleteCustomerService, getAllCustomersService, getAllCustomersWithReservationsService, getCustomerByIDService,  /*getCustomerByUserIDService,*/ updateCustomerService } from "./customer.service";
 import { Request, Response } from "express";
-import bycrypt from "bcryptjs";
 
-//create customer conroller
+//create customer controller
 
 export const createCustomerController = async( req: Request, res: Response) =>{
     try {
@@ -25,9 +24,9 @@ export const createCustomerController = async( req: Request, res: Response) =>{
 }
 
 //Get all customers
-export const getAllCustomerController = async(req: Request, res: Response) =>{
+export const getAllCustomersController = async(req: Request, res: Response) =>{
     try {
-        const allCustomers = await getAllCustomerService()
+        const allCustomers = await getAllCustomersService()
         if (!allCustomers || allCustomers.length === 0) {
             return res.status(404).json({message : "No Customers Found"})
         }
@@ -49,6 +48,19 @@ export const getCustomerByIdController = async (req: Request, res: Response) => 
             return res.status(404).json({message: "Customer not found"});
         }
         return res.status(200).json({data: getCustomerByID});
+    } catch (error: any) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
+//Get customers with reservations
+export const getAllCustomersWithReservationsController = async (req: Request, res: Response) => {
+    try {
+         const customersWithReservations = await getAllCustomersWithReservationsService();
+        if (!customersWithReservations) {
+            return res.status(404).json({message: "Customer not found"});
+        }
+        return res.status(200).json({data: customersWithReservations});
     } catch (error: any) {
         return res.status(500).json({error: error.message});
     }
@@ -91,3 +103,21 @@ export const deleteCustomerController = async (req: Request, res: Response) => {
         return res.status(500).json({error: error.message});
     }
 }
+
+// get Customer by Specific id controller
+// export const getCustomerByUserIdController = async (req: Request, res: Response) => {
+//     try {
+//         const id  = parseInt (req.params.id);
+//         if (isNaN(id)) {
+//             return res.status(400).json({message: "Invalid ID format"});
+//         }
+//         const getCustomerByID = await getCustomerByUserIDService(id);
+//         if (!getCustomerByID) {
+//             return res.status(404).json({message: "Customer not found"});
+//         }
+//         return res.status(200).json({data: getCustomerByID});
+//     } catch (error: any) {
+//         return res.status(500).json({error: error.message});
+//     }
+// }
+
