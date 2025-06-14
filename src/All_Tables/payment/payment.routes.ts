@@ -38,6 +38,39 @@ const paymentRoutes = (app: Express) => {
             }
         }
     )
+
+    //Get Payment by CarID
+    app.route("/payment/car/:id").get(
+        async (req, res, next) =>{
+            try {
+                await getPaymentByIdController(req, res);
+            } catch (error: any) {
+                next(error)
+            }
+        }
+    )
+
+    //Get Payment by BookingID
+    app.route("/payment/booking/:id").get(
+        async (req, res, next) =>{
+            try {
+                await getPaymentByIdController(req, res);
+            } catch (error: any) {
+                next(error)
+            }
+        }
+    )
+
+    //Get Cars by PaymentID
+    app.route("/car/payment/:id").get(
+        async (req, res, next) =>{
+            try {
+                await getPaymentByIdController(req, res);
+            } catch (error: any) {
+                next(error)
+            }
+        }
+    )
     
     //Delete Payment by ID
     app.route("/payment/delete/:id").delete(
@@ -48,9 +81,7 @@ const paymentRoutes = (app: Express) => {
                 next(error)
             }
         }
-    )
-
-    
+    )    
 }
 
 export default paymentRoutes;

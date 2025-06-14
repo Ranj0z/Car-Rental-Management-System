@@ -1,14 +1,32 @@
 import { eq } from "drizzle-orm";
-import db from "../Drizzle/db";
-import { CustomerTable, TICustomer, TSCustomer } from "../Drizzle/schemas";
+import db from "../../Drizzle/db";
+import { CustomerTable, TICustomer } from "../../Drizzle/schemas";
+import { sql } from "drizzle-orm";
 
 //CRUD
 //Customer Table
-//Create a new Customer
-export const createCustomerService = async (customer: TICustomer) => {
+export const registerNewUser = async (customer: TICustomer) => {
     await db.insert(CustomerTable).values(customer);
 
     return "User created sucessfully";
+}
+
+//login a customer
+export const customerLoginService = async (customer : TICustomer) =>{
+    //email and phone number
+    const { email } = customer;
+
+    return await db.query.CustomerTable.findFirst({
+        columns:  { 
+            firstName: true, 
+            lastName: true, 
+            email: true, 
+            phoneNumber: true, 
+            address: true,
+            password: true,
+            role: true,
+        }, where: sql`${CustomerTable.email} = ${email}`
+    })
 }
 
 //Get All Existing Customers
@@ -33,6 +51,25 @@ export const getCustomerByIDService = async (ID: number) => {
     where: eq(CustomerTable.CustomerID, ID)
   });
   return customerByID;
+};
+
+// get customers with bookings, car and location details
+export const getCustomersWithBookingsAndCarDetails = async (CustomerID: number) => {
+  const custID =  await db.query.CustomerTable.findFirst({
+    where: eq(CustomerTable.CustomerID, CustomerID),
+    with: {
+      bookings: {
+        with: {
+          car: {
+            with: {
+              location: true
+            }
+          }
+        }
+      }
+    }
+  });
+  return custID;
 };
 
 //update a customer by id

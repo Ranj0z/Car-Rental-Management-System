@@ -8,15 +8,11 @@ import { Request, Response } from "express";
 export const makePaymentController = async( req: Request, res: Response) =>{
     try {
         const payment = req.body;
-        //hash Phone Number
-        // const phone_number = customer.phone_number; 
-        // const hashedNumber = await bycrypt.hashSync(phone_number, 10);
-        // customer.phone_number = hashedNumber;
 
         const makePayment = await makePaymentService(payment)
         if (!makePayment) 
             return res.json({message: "Payment not successfull"})
-            return res.status(201).json({message: "Payment made successfully!!", makePayment})
+            return res.status(201).json({message: "Payment made successfully!!", payment})
    
     } catch (error :any) {
         return res.status(500).json({error: "error.message"});

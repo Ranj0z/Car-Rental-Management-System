@@ -6,7 +6,7 @@ import { createReservationController, deleteReservationController, getAllReserva
 //CRUD
 const reservationRoutes = (app: Express) => {
     //route
-    app.route("/reservation/newreservation").post(
+    app.route("/reservation/newReservation").post(
         async (req, res, next) =>{
             try {
                 await createReservationController(req, res);
@@ -59,7 +59,7 @@ const reservationRoutes = (app: Express) => {
     )
     
     //update reservation by id
-    app.route("/booking/update/:id").put(
+    app.route("/reservation/update/:id").put(
         async (req, res, next) => {
             try {
                 await updateReservationController(req, res);

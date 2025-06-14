@@ -18,30 +18,6 @@ export const CustomerTable = pgTable("customer", {
     verificationCode: varchar("verification_code", {length: 10})
     }
 )
-/* 
-1. User will provide:
-    firstName, lastName,email, phoneNumber, Address, Password, 
-    role:user, isVerified: false, verification code: 12345
-
-2. Controller to send code
-    send an email from (dkranjoz16@gmail.com) -> 12345
-
-3. user will receive the code
-
-    //router
-4. Postman: verify user:
-    "email" : david.k.mwangi01@gmail.com
-    "code" : 12345
-
-    //service
-5. verifyUserService
-    12345 == 12345 if true
-    set isVerified -> true
-    set verificationCode -> null
-
-    firstName, lastName,email, phoneNumber, Address, Password, 
-    role:user, isVerified: true, verification code: null
-*/
 
 export const LocationTable = pgTable("location", {
     LocationID: serial("LocationID").primaryKey(),
@@ -197,12 +173,35 @@ export type TIReservation = typeof ReservationTable.$inferInsert;
 export type TSReservation = typeof ReservationTable.$inferSelect;
 export type TIPayment = typeof PaymentTable.$inferInsert;
 export type TSPayment = typeof PaymentTable.$inferSelect;
-// export type TICar = typeof CarTable.$inferInsert;
-// export type TSCar = typeof CarTable.$inferSelect;
-// export type TICar = typeof CarTable.$inferInsert;
-// export type TSCar = typeof CarTable.$inferSelect;
-// export type TICar = typeof CarTable.$inferInsert;
-// export type TSCar = typeof CarTable.$inferSelect;
+export type TIMaintenance = typeof MaintenanceTable.$inferInsert;
+export type TSMaintenance = typeof MaintenanceTable.$inferSelect;
+export type TILocation = typeof LocationTable.$inferInsert;
+export type TSLocation = typeof LocationTable.$inferSelect;
+export type TIInsurance= typeof InsuranceTable.$inferInsert;
+export type TSInsurance = typeof InsuranceTable.$inferSelect;
 
 
+/* 
+1. User will provide:
+    firstName, lastName,email, phoneNumber, Address, Password, 
+    role:user, isVerified: false, verification code: 12345
 
+2. Controller to send code
+    send an email from (dkranjoz16@gmail.com) -> 12345
+
+3. user will receive the code
+
+    //router
+4. Postman: verify user:
+    "email" : david.k.mwangi01@gmail.com
+    "code" : 12345
+
+    //service
+5. verifyUserService
+    12345 == 12345 if true
+    set isVerified -> true
+    set verificationCode -> null
+
+    firstName, lastName,email, phoneNumber, Address, Password, 
+    role:user, isVerified: true, verification code: null
+*/

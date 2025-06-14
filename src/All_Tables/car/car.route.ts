@@ -6,6 +6,7 @@ import { createCarController, getAllCarController, getCarByIdController, deleteC
 //CRUD
 const carRoutes = (app: Express) => {
     //route
+    //Add new car
     app.route("/car/newcar").post(
         async (req, res, next) =>{
             try {
@@ -55,7 +56,6 @@ const carRoutes = (app: Express) => {
         }
     )
     
-
     //get Car by ID
     app.route("/car/:id").get(
         async (req, res, next) =>{
@@ -66,6 +66,17 @@ const carRoutes = (app: Express) => {
             }
         }
     )
+
+    //Get Cars by InsuranceID
+    // app.route("/car/insurance/:id").get(
+    //     async (req, res, next) =>{
+    //         try {
+    //             await getCarByInsuranceIdController(req, res);
+    //         } catch (error: any) {
+    //             next(error)
+    //         }
+    //     }
+    // )
     
     //update car by id
     app.route("/car/update/:id").put(

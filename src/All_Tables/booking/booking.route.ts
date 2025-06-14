@@ -1,7 +1,7 @@
 //routing
 import { Express } from "express";
-import { createBookingController, deleteBookingController, getAllBookingsController, getBookingByCarIdController, getBookingByCustomerIdController, getBookingByIdController, updateBookingController } from "./booking.controller";
-import { userRoleAuth } from "../middleware/bearAuth";
+import { createBookingController, deleteBookingController, getAllBookingsController, getAllCarsWithBookingsController, getBookingByCarIdController, getBookingByCustomerIdController, getBookingByIdController, getBookingByPaymentIdController, updateBookingController } from "./booking.controller";
+import { userRoleAuth } from "../../middleware/bearAuth";
 
 
 //CRUD
@@ -59,7 +59,29 @@ const bookingRoutes = (app: Express) => {
             }
         }
     )
-    
+
+    // Fetching bookings for all cars
+    app.route("/booking/allCarsWithBookings").get(
+        async (req, res, next) =>{
+            try {
+                await getAllCarsWithBookingsController(req, res);
+            } catch (error: any) {
+                next(error)
+            }
+        }
+    )
+        
+    // Get bookings By PaymentID
+    app.route("/booking/PaymentID/:id").get(
+        async (req, res, next) =>{
+            try {
+                await getBookingByPaymentIdController(req, res);
+            } catch (error: any) {
+                next(error)
+            }
+        }
+    )
+
     //update booking by id
     app.route("/booking/update/:id").put(
         async (req, res, next) => {

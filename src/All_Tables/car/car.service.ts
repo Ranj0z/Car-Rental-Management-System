@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import db from "../Drizzle/db";
-import {CarTable, TICar } from "../Drizzle/schemas";
+import db from "../../Drizzle/db";
+import {CarTable, MaintenanceTable, TICar } from "../../Drizzle/schemas";
 
 
 //Car Table
@@ -25,6 +25,35 @@ export const getCarByIDService = async (CarID: number) => {
   });
   return carByID;
 };
+
+
+//Get a Car by MaintenanceID
+export const getCarByMaintenanceIDService = async (MaintenanceID: number) => {
+  const maintenance = await db.query.MaintenanceTable.findFirst({
+    where: eq(MaintenanceTable.MaintenanceID, MaintenanceID),
+  });
+
+   if (!maintenance) {
+    return "No Maintenance found"; // or throw an error if you prefer
+  }
+
+
+  const CarByMaintenance = await db.query.CarTable.findFirst({
+    where: eq(CarTable.CarID, maintenance.carID),
+      with: {
+        maintenance: true, // include maintenances if you want
+      }
+    })
+
+  const CarByID = CarByMaintenance?.CarID
+  ? await db.query.CarTable.findFirst({
+      where: eq(CarTable.CarID, CarByMaintenance.CarID),
+    })
+  : null;
+
+  return CarByID;
+};
+
 
 
 //update a car by id

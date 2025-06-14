@@ -27,7 +27,7 @@ export const getAllCarController = async (req: Request, res: Response) =>{
          if (!getAllCars || getAllCars.length === 0) {
             return res.status(404).json({message: "No cars found"});
         }
-        return res.status(200).json({data: getAllCars});
+        return res.status(200).json({Cars: getAllCars});
     
     } catch (error: any) {
         return res.status(500).json({error: error.message})        

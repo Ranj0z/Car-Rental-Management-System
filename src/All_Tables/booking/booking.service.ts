@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
-import db from "../Drizzle/db";
-import { BookingTable, TIBooking } from "../Drizzle/schemas";
+import db from "../../Drizzle/db";
+import { BookingTable, PaymentTable, TIBooking } from "../../Drizzle/schemas";
 
 
-//Car Table
+//Booking Table
 //Create a new booking
 export const createBookingService = async(newbooking :TIBooking) => {
     await db.insert(BookingTable).values(newbooking);
@@ -11,7 +11,7 @@ export const createBookingService = async(newbooking :TIBooking) => {
     return "Booking created successfully";
 }
 
-//Get All bookings from carTable
+//Get All bookings from BookingTable
 export const getAllBookingsService = async () =>{
     const allBookings = await db.query.BookingTable.findMany()
     return allBookings;
@@ -42,6 +42,45 @@ export const getBookingByCustomerIDService = async (ID: number) => {
   return bookingByID;
 };
 
+// Get bookings By PaymentID
+export const getBookingByPaymentIDService = async (ID: number) => {
+  const payment = await db.query.PaymentTable.findFirst({
+    where: eq(PaymentTable.PaymentID, ID),
+  });
+
+   if (!payment) {
+    return "No payments found"; // or throw an error if you prefer
+  }
+
+  const bookingByID = await db.query.BookingTable.findFirst({
+    where: eq(BookingTable.BookingID, payment.BookingID),
+    with: {
+      payments: true, // include payments if you want
+    }
+  });
+
+  return bookingByID;
+};
+
+// Fetching bookings for all cars
+export const getAllCarsWithBookingsService = async () => {
+     const carsWithBookings = await db.query.CarTable.findMany({
+        with: {
+            bookings: true
+        }
+    })
+    return carsWithBookings;
+}
+
+// Fetching bookings with Payments
+export const getAllBookingsWithPaymentsService = async () => {
+     const BookingsWithPayments = await db.query.BookingTable.findMany({
+        with: {
+            payments: true
+        }
+    })
+    return BookingsWithPayments;
+}
 
 //update a booking by id
 export const updateBookingService = async (ID: number, bookingTable: Partial<TIBooking>) => {
@@ -51,7 +90,7 @@ export const updateBookingService = async (ID: number, bookingTable: Partial<TIB
         .returning();
     
     if (updated) {
-        return "Booking updated successfully ✅";
+        return "Booking updated successfully";
     }
     return "Booking not updated"
 }

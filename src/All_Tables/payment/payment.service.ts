@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import db from "../Drizzle/db";
-import { PaymentTable, TIPayment } from "../Drizzle/schemas";
+import db from "../../Drizzle/db";
+import { CarTable, PaymentTable, TIPayment } from "../../Drizzle/schemas";
 
 //CRUD
 //Payment Table
@@ -24,15 +24,6 @@ export const getPaymentByIDService = async (ID: number) => {
   });
   return paymentByID;
 };
-
-// // Get payment By PaymentID
-// export const getPaymentByCustomerIDService = async (ID: number) => {
-//   const paymentByCustomerID = await db.query.PaymentTable.findFirst({
-//     where: eq(PaymentTable.customerID, ID)
-//   });
-//   return paymentByID;
-// };
-
 
 // Delete Payment By ID
 export const deletePaymentService = async (ID: number) =>{

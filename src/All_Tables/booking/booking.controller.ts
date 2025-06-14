@@ -1,6 +1,6 @@
 // API
 
-import { createBookingService, deleteBookingService, getAllBookingsService, getBookingByCarIDService, getBookingByCustomerIDService, getBookingByIDService, updateBookingService } from "./booking.service";
+import { createBookingService, deleteBookingService, getAllBookingsService, getAllCarsWithBookingsService, getBookingByCarIDService, getBookingByCustomerIDService, getBookingByIDService, getBookingByPaymentIDService, updateBookingService } from "./booking.service";
 import { Request, Response } from "express";
 
 //Create a new booking
@@ -86,6 +86,38 @@ export const getBookingByCustomerIdController = async (req: Request, res: Respon
         return res.status(500).json({error: error.message});
     }
 }
+// Get bookings By PaymentID
+export const getBookingByPaymentIdController = async (req: Request, res: Response) => {
+    try {
+        const id  = parseInt (req.params.id);
+        if (isNaN(id)) {
+            return res.status(400).json({message: "Invalid ID format"});
+        }
+        const getBookingByID = await getBookingByPaymentIDService(id);
+        if (!getBookingByID) {
+            return res.status(404).json({message: "Booking not found"});
+        }
+        return res.status(200).json({data: getBookingByID});
+    } catch (error: any) {
+        return res.status(500).json({error: error.message});
+    }
+}
+
+// Fetching bookings for all cars
+export const getAllCarsWithBookingsController = async (req: Request, res: Response) =>{
+    try {
+        const allBookings =req.body;
+
+        const getAllCarsWithBookings = await getAllCarsWithBookingsService();
+         if (!getAllCarsWithBookings || getAllCarsWithBookings.length === 0) {
+            return res.status(404).json({message: "No Bookings found"});
+        }
+        return res.status(200).json({data: getAllCarsWithBookings});
+    
+    } catch (error: any) {
+        return res.status(500).json({error: error.message})        
+    }
+}
 
 
 // Update booking
@@ -97,12 +129,6 @@ export const updateBookingController = async (req: Request, res: Response) => {
         }
         
         const bookingUpdates = req.body;
-        
-        // Convert dueDate to Date object if provided
-        // if (carUpdates.dueDate) {
-        //     carUpdates.dueDate = new Date(carUpdates.dueDate);
-        // }
-
         const updatedMessage = await updateBookingService(id, bookingUpdates);
         if (!updatedMessage) {
             return res.status(404).json({message: "Booking not found!!"});

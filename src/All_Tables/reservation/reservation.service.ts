@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
-import db from "../Drizzle/db";
-import { ReservationTable, TIReservation } from "../Drizzle/schemas";
+import db from "../../Drizzle/db";
+import { ReservationTable, TIReservation } from "../../Drizzle/schemas";
 
 
 //Car Table
